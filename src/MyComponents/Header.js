@@ -20,24 +20,11 @@ export default function Header(props) {
                 <Link className="nav-link" to="/about">About</Link>
               </li>
             </ul>
-            { props.searchBar? <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>:""}
+            { props.searchBar?<form className="d-flex">
+              <input className="form-control me-2" type="search" placeholder="Search Todo List" onChange={props.onFilter}/>
+            </form>:''}
           </div>
         </div>
       </nav>
     )
-}
-
-//this is define to mention that title should be in string type, if other is used than it will show error in console// 
-Header.propTypes = {
-  title: PropTypes.string,
-  searchBar: PropTypes.bool.isRequired 
-}
-
-//Default Props : when user didn't give any title from parent component then what will display
-Header.defaultProps = {
-  title: "Your Title Here",
-  searchBar: true
 }

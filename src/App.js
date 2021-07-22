@@ -16,6 +16,14 @@ function App() {
     initTodo = JSON.parse(localStorage.getItem("todos"));
   }
 
+  const [todos, setTodos] = useState(initTodo);
+  const [filterResult, setFilterResult] = useState(todos);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+    setFilterResult(todos)
+  }, [todos]);
+
   const onDelete = (todo) => {
     console.log("I am onDelete of todo", todo);
 
@@ -24,6 +32,17 @@ function App() {
         return e !== todo;
       })
     );
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
+  const onFilter = (event) => {
+    var searchText = event.target.value.toLowerCase()
+    setFilterResult(
+      todos.filter((e) => {
+        return e.title.toLowerCase().includes(searchText);
+      })
+    );
+
     localStorage.setItem("todos", JSON.stringify(todos));
   };
 
@@ -46,30 +65,25 @@ function App() {
     console.log(myTodo);
   };
 
-  const [todos, setTodos] = useState(initTodo);
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
   return (
     <>
       <Router>
-        <Header title="My Todos List" searchBar={false} />
-        <Switch>
+        <Header title="My Todos List" searchBar={true} onFilter={onFilter} />
+         <Switch>
           <Route exact path="/" render={() => {
-              return (
-                <>
-                  <AddTodo addTodo={addTodo} />
-                  <Todos todos={todos} onDelete={onDelete} />
-                </>
-              );
-            }}
+            return (
+              <>
+                <AddTodo addTodo={addTodo} />
+                <Todos todos={filterResult} onDelete={onDelete} />
+              </>
+            );
+          }}
           ></Route>
           <Route exact path="/about">
             <About />
           </Route>
         </Switch>
-       <Footer />
+        <Footer />
       </Router>
     </>
   );
